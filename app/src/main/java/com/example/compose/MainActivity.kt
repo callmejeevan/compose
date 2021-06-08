@@ -1,5 +1,6 @@
 package com.example.compose
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,6 +50,7 @@ fun MyApp(content: @Composable () -> Unit) {
 
 @Composable
 fun MyScreenLayout(){
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -55,7 +58,7 @@ fun MyScreenLayout(){
                     Text(text = "Call Me Jeevan")
                 },
                 actions = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { context.startActivity(Intent(context, SecondActivity::class.java)) }) {
                         Icon(Icons.Filled.Favorite, contentDescription = null)
                     }
                 },
