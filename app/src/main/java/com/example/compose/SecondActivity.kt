@@ -4,14 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.FirstBaseline
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,8 +55,15 @@ class SecondActivity : ComponentActivity() {
 
     @Composable
     fun MySecondScreenContent(){
-        Text(text = "Hai" , Modifier.firstBaselineToTop(55.dp))
-        Text(text = "Jeee" , Modifier.padding(top = 55.dp))
+        Column {
+            Text(text = "Hai" , Modifier.firstBaselineToTop(55.dp))
+            Text(text = "Jeee" , Modifier.padding(top = 55.dp))
+            MyOwnColumn(modifier = Modifier.background(Color.Yellow)) {
+                Text(text = "Jeevan", modifier = Modifier.background(Color.Green))
+                Text(text = "Venugopal")
+            }
+        }
+        
     }
 
     // Sample custom modifier from code lab
@@ -76,6 +87,43 @@ class SecondActivity : ComponentActivity() {
             }
         }
     )
+    
+    // Sample custom layout from the code lab
+    @Composable
+    fun MyOwnColumn(
+        modifier: Modifier = Modifier,
+        content: @Composable () -> Unit
+    ) {
+        Layout(
+            modifier = modifier,
+            content = content
+        ) { measurable, constraints ->
+
+            // Don't constrain child views further, measure them with given constraints
+            // List of measured children
+            val placeables = measurable.map { measurable ->
+                // Measure each child
+                measurable.measure(constraints)
+            }
+
+            // Track the y co-ord we have placed children up to
+            var yPosition = 0
+
+            // Set the size of the layout as big as it can
+            layout(constraints.maxWidth, constraints.maxHeight) {
+                // Place children in the parent layout
+                placeables.forEach { placeable ->
+                    // Position item on the screen
+                    placeable.placeRelative(x = 0, y = yPosition)
+
+                    // Record the y co-ord placed up to
+                    yPosition += placeable.height
+                }
+            }
+        }
+    }
+
+
 
     @Preview
     @Composable
